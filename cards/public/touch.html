@@ -1,0 +1,78 @@
+<html>
+
+<head>
+<style>
+#main {
+	width:200px;
+	height:200px;
+	background-color:#345;
+	color:white;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+Math.qp = Math.PI /4;
+function prev()
+{
+	alert("prev");
+}
+
+function next()
+{
+	alert("next");
+}
+
+//takes start and end of vector to determine of the vector is mainly horizontal, if not returns 0.
+//returns negative value if from right to left, or + if ltr.
+function generallyX(v1, v2)
+{
+	var x = v2.x - v1.x;
+	var y = v2.y - v1.y;
+
+	var atan = Math.abs(Math.atan2(x, y));
+	console.log("atan = " + atan);
+	//so it should be in range Math.PI/2 -+ PI/4
+	if(atan >= Math.qp && atan <= 3*Math.qp) return x;
+	return 0;
+}
+
+$(document).ready(function(){
+	var start;
+	var startTime;
+	$("#main").on("touchstart", function(e)
+	{
+		startTime = $.now();
+		start = {x:e.originalEvent.touches[0].clientX, y:e.originalEvent.touches[0].clientY};
+		
+	}).on("touchmove", function(e)
+	{
+		e.preventDefault();
+		//We can differentiate a pan from a flick, if that matters, by noting
+		//the acceleration and/or speed between touches in the move event.
+	}).on("touchend", function(e)
+	{	
+		//debugger;
+		if(e.originalEvent.touches.length > 1) return;
+		if(e.originalEvent.changedTouches.length == 0) return;
+		var touchInterval = $.now() - startTime;
+		if(touchInterval > 700) return;
+
+		end = {x:e.originalEvent.changedTouches[0].clientX, y:e.originalEvent.changedTouches[0].clientY};
+		var gex = generallyX(start, end);
+		console.log(gex);
+
+		if(gex > 0) next();
+		else if (gex < 0) prev();
+	});
+});
+</script>
+
+</head>
+<body>
+<div id="main">
+This div will respond to touch events.
+
+</div>
+</body>
+
+</html>

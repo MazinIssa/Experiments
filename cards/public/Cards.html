@@ -1,0 +1,177 @@
+﻿<html>
+<head>
+    <title>Haskell Cards</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <style>
+        body
+        {
+            font-family: Verdana, sans-serif;
+            background-color: black;
+        }
+
+        .card
+        {
+            position: absolute;
+            width: inherit;
+            overflow: auto;
+            background-color: white;
+            left: 0px;
+            padding: 15px;
+        }
+
+        .card p
+        {
+            margin-bottom: 20px;
+            display: block;
+            text-align: justify;
+        }
+
+        #middle
+        {
+            width: 100%;
+            margin: 0px auto;
+        }
+
+        #slideso
+        {
+            background-color: #333;
+            padding: 6px;
+            border-radius: 5px 5px 5px 5px;
+        }
+
+        #slides
+        {
+            position: relative;
+            height: 100%;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px 5px 5px 5px;
+            overflow: hidden;
+        }
+
+        h2
+        {
+            margin: 0 0 15px;
+            background-color: #0f99f9;
+            padding: 7px 15px;
+        }
+
+        #nav
+        {
+            text-align: center;
+        }
+
+        #next, #back
+        {
+            color: blue;
+            font-size: 124px;
+        }
+    </style>
+    <script>
+        Math.qp = Math.PI / 4;
+        //takes start and end of vector to determine of the vector is mainly horizontal, if not returns 0.
+        //returns negative value if from right to left, or + if ltr.
+        function generallyX(v1, v2) {
+            var x = v2.x - v1.x;
+            var y = v2.y - v1.y;
+
+            var atan = Math.abs(Math.atan2(x, y));
+            console.log("atan = " + atan);
+            //so it should be in range Math.PI/2 -+ PI/4
+            if (atan >= Math.qp && atan <= 3 * Math.qp) return -x; //the neg sign because it feels more natural reversed.
+            return 0;
+        }
+
+        var current = 0;
+        function next() {
+            if (current < $(".card").length - 1)
+                $("#card" + current++).animate({ left: "-=100%", right: "+=100%" }, 500);
+        }
+
+        function prev() {
+            if (current > 0) {
+                current--;
+                $("#card" + current).animate({ left: 0, right: 0 }, 500);
+            }
+        }
+
+        function createCard(title, content, id, zindex) {
+            var header = $("<h2>").html(title);
+            var div = $("<div>").attr('id', "card" + id).addClass("card").css('z-index', zindex)
+                .append(header)
+                .append(content);
+
+            $("#slides").prepend(div);
+        }
+
+        $(document).ready(function () {
+
+  
+
+            $.get("data.xml", "xml", function (data) {
+                $(data.documentElement.getElementsByTagName("card")).each(function (i, card) {
+                    //@*question: $(card).children() is a list of XML <p> elements. 
+                    //  Will those be treated the same as HTML paragraph elemnts, or should I loop over them?*@
+                    createCard(card.getAttribute("title"), $(card).children(), i, 1000 - i);
+                });
+
+                //subscribe to touch events on the cards after they are loaded
+                (function () {
+                    var start;
+                    var startTime;
+                    $(".card").on("touchstart", function (e) {
+                        startTime = $.now();
+                        start = { x: e.originalEvent.touches[0].clientX, y: e.originalEvent.touches[0].clientY };
+
+                    }).on("touchmove", function (e) {
+                        e.preventDefault();
+                        //We can differentiate a pan from a flick, if that matters, by noting
+                        //the acceleration and/or speed between touches in the move event.
+                    }).on("touchend", function (e) {
+                        //debugger;
+                        if (e.originalEvent.touches.length > 1) return;
+                        if (e.originalEvent.changedTouches.length == 0) return;
+                        var touchInterval = $.now() - startTime;
+                        if (touchInterval > 700) return;
+
+                        end = { x: e.originalEvent.changedTouches[0].clientX, y: e.originalEvent.changedTouches[0].clientY };
+                        var gex = generallyX(start, end);
+                        console.log(gex);
+
+                        if (gex > 0) next();
+                        else if (gex < 0) prev();
+                    });
+                })();
+
+
+            }).fail(function () {
+                console.log("Error obtaining data!");
+                createCard("Oops!", "<p>We are sorry but there was a problem connecting to server. Please try again later.</p>");
+            });
+
+            $("#next").click(function () {
+                next();
+                return false;
+            });
+
+            $("#back").click(function () {
+                prev();
+                return false;
+            });
+
+        });
+
+    </script>
+
+</head>
+<body>
+    <div id="container">
+        <div id="middle">
+            <div id="slideso">
+                <div id="slides"></div>
+            </div>
+            <div id="nav"><a id="back" href="#">Back</a>&nbsp;<a id="next" href="#">Next</a></div>
+        </div>
+    </div>
+</body>
+</html>
