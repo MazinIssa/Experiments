@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Content/StyleSheet1.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.8.2.js"></script>
+</head>
+<body>
+    <div class="">
+        <p class="indent"><span>X<span></span></span>avier established a school for the X-Men.</p>
+        <p class="double-line-height font24">border:4px double black;creates a black, 4-pixel, double-line border. Notice how 
+bordertakes three space-delimited values thatrepresent the border’s width, style, 
+and color. The sequence of the values does not matter. borderis a shortcut 
+property for three properties: border-width, border-style, and border-color. 
+There are several other shortcut properties including background, font, liststyle, margin, and padding.</p>
+    </div>
+    <input type="button" onclick="start()" value="Start animation" />
+    <div class="relative">
+        <div id="anidiv" class="hors"></div>
+    </div>
+</body>
+       <script>
+           function start() {
+
+               var div = $("#anidiv").toggleClass('hors');
+
+               /*var color = $("#anidiv").css('background-color');
+               console.log(color);
+               console.log($("#anidiv").css('background-color'));
+               $("#anidiv").css('background-color', 'blue');
+               if (color == $("#anidiv").css('background-color'))
+                   $("#anidiv").css('background-color', 'red');
+
+               console.log(color);
+               console.log($("#anidiv").css('background-color'));*/
+           }
+
+            function colorToHex(color) {
+                if (color.substr(0, 1) === '#') {
+                    return color;
+                }
+
+                var digits = /(.*?)rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(color);
+
+                var red = parseInt(digits[2]);
+                var green = parseInt(digits[3]);
+                var blue = parseInt(digits[4]);
+
+                var rgb = blue | (green << 8) | (red << 16);
+                return digits[1] + '#' + rgb.toString(16);
+            };
+
+            var colors = [];//["rgb(0,200,250)", "rgb(50, 0, 100)", "rgb(60,70,0)"];//["yellow", "gold", "wheat", "orange", "tomato", "firebrick"];
+            for (var c = 0; c < colors.length; c++) {
+                var div = document.createElement("div");
+                var hex = colorToHex(colors[c]);
+                div.innerText = hex;
+                div.style.backgroundColor = hex;
+                console.log(hex);
+                div.style.width = "100px";
+                div.style.height = "100px";
+                document.body.appendChild(div);
+            }
+    </script>
+</html>

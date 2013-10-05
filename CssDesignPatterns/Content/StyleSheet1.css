@@ -1,0 +1,131 @@
+﻿
+#h2{
+    position:relative; width:250px; height:76px; overflow:hidden;
+}
+#h2 span {
+    position:absolute; width:250px; height:76px; 
+    left:0; top:0; background:url("/Content/owl.jpg") no-repeat;
+}
+
+*.left-marginal {
+    position:relative; margin-left: 200px;
+}
+
+*.marginal-heading{
+    position:absolute; left:-200px; top:0; margin:0;
+}
+
+.indent{
+    margin-left: 120px;
+    position:relative;
+}
+
+.indent > span{
+    margin: 0;
+    position: absolute;
+    left:-61px;
+}
+
+.indent > span > span{
+    position:absolute;
+    background: url("/Content/x.png");
+    width:61px;
+    height:82px;
+    left:0;
+}
+
+.double-line-height
+{
+    line-height: 200%;
+}
+
+.font24{
+    font-size: 25px;
+}
+
+@media print{
+    *
+    {
+        -webkit-print-color-adjust: exact;
+    }
+}
+
+#anidiv {
+    position:absolute;
+    width: 100px;
+    height: 100px;
+    background-color: #89a;
+    /*-moz-transition: all linear 1s;
+    -o-transition: all linear 1s;
+    -webkit-transition: all linear 1s;
+    transition: all linear 1s;*/
+}
+
+.hors {
+    -moz-animation-name: hors;
+    -webkit-animation-name: hors;
+    -o-animation-name: hors;
+    animation-name: hors;
+    -moz-animation-duration: 5s;
+    -o-animation-duration: 5s;
+    -webkit-animation-duration: 5s;
+    animation-duration: 5s;
+    -moz-animation-iteration-count: 10;
+    -o-animation-iteration-count: 10;
+    -webkit-animation-iteration-count: 10;
+    animation-iteration-count: 10;
+}
+
+@keyframes hors {
+    0% {
+        top:0;
+        left:0;
+    }
+
+    50% {
+        top:50px;
+        left:50px;
+    }
+
+    100%
+    {
+        top:0;
+        left:0;
+    }
+}
+
+@-moz-keyframes hors {
+    0% {
+        top:0;
+        left:0;
+    }
+
+    50% {
+        top:50px;
+        left:50px;
+    }
+
+    100%
+    {
+        top:0;
+        left:0;
+    }
+}
+
+@-webkit-keyframes hors {
+    0% {
+        top:0;
+        left:0;
+    }
+
+    50% {
+        top:50px;
+        left:50px;
+    }
+
+    100%
+    {
+        top:0;
+        left:0;
+    }
+}
