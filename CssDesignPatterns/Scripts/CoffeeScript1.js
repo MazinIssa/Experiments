@@ -1,13 +1,13 @@
-﻿(function() {
+(function() {
   var VideoPlayer,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   window.VideoPlayer = VideoPlayer = (function() {
-
     VideoPlayer.prototype.beforeChangeStyle = {};
 
     VideoPlayer.prototype.updateLanguage = function() {
       var bar;
+
       this.srt = this.src.replace(".mp4", "-" + this.currentLang + ".vtt");
       this.track.attr({
         "default": "default",
@@ -64,8 +64,10 @@
 
     VideoPlayer.prototype.createEventHandler = function(jQElement, callback) {
       var _this = this;
+
       return function(e) {
         var desiredPercentage, pageSth, tl;
+
         pageSth = "page" + (_this.isFullScreen ? 'Y' : 'X');
         tl = _this.isFullScreen ? 'top' : 'left';
         if (e.originalEvent.touches != null) {
@@ -83,6 +85,7 @@
 
     VideoPlayer.prototype.initVolumeControls = function() {
       var _this = this;
+
       this.volumeControls = $("<div class='volume-controls'>");
       this.timeSpan = $("<div class='time-div'>00:00</div>");
       this.fullScreenButton = $("<input type='button' class='button fullscreen-button'>").html("").click(function() {
@@ -94,9 +97,11 @@
     VideoPlayer.prototype.initVideoProgress = function() {
       var videoProgressHandler,
         _this = this;
+
       this.progressContainer = $("<div class='progress-container'>");
       videoProgressHandler = this.createEventHandler(this.progressContainer, function(percentage) {
         var desiredTime;
+
         desiredTime = (_this.videoElement[0].duration * percentage).toFixed(0);
         _this.videoElement[0].currentTime = desiredTime;
         return null;
@@ -108,21 +113,15 @@
     function VideoPlayer(container, options) {
       var buttonsDiv, someDiv,
         _this = this;
+
       this.container = container;
       this.createEventHandler = __bind(this.createEventHandler, this);
-
       this.attach = __bind(this.attach, this);
-
       this.detach = __bind(this.detach, this);
-
       this.setPoster = __bind(this.setPoster, this);
-
       this.setSource = __bind(this.setSource, this);
-
       this.setLanguage = __bind(this.setLanguage, this);
-
       this.updateLanguage = __bind(this.updateLanguage, this);
-
       if (options) {
         this.src = options.src;
       }
@@ -158,6 +157,7 @@
         return _this.duration = _this.videoElement[0].duration;
       }).bind("timeupdate", function() {
         var minutes, minutesZero, percentComplete, secondsZero, text, totalSeconds;
+
         totalSeconds = Math.floor(_this.videoElement[0].currentTime);
         minutes = Math.floor(totalSeconds / 60);
         minutesZero = minutes < 10 ? "0" : "";
