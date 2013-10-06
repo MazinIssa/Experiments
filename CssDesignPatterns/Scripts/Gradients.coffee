@@ -64,6 +64,12 @@ window.Gradient = class Gradient
             for i in [0..@colors.length-1] by 1
              #stops count == color count
                 @stops[i] = percentageStep * (i+1)
+
+        for i in [0..@colors.length-1] by 1
+            @colorStops.push(
+                color:@colors[i]
+                stop:@stops[i])
+
         @v = [1,1]
         @assignRandomVelocity();
 
