@@ -1,0 +1,151 @@
+/*has the potential for more sophisticated visualizations or perhaps effects for a simple game*/
+/*I find it soothing to just play witht he gradients with the mouse, so maybe i'll add more 
+interactivity in the future and if that grows it'll be a simple game in itself. a game of playin with visual art.*/
+
+<html>
+    <head>
+        <title>something</title>
+        <link href="~/Content/StyleSheet1.css" rel="stylesheet" />
+        <style>
+            /*#radial
+            {
+                width:100%;
+                height:100%;
+                background-image: -webkit-radial-gradient(50px 50px, circle closest-side, black, white);
+                background-image: -webkit-gradient(radial, center center, 0, center center, 141, from(black), to(white), color-stop(25%, blue), color-stop(40%, green), color-stop(60%, red), color-stop(80%, purple)); 
+                background-image: -webkit-radial-gradient(center center, circle contain, black 0%, blue 25%, green 40%, red 60%, purple 80%, white 100%); 
+            }*/
+        </style>
+        <script src="~/Scripts/jquery-1.8.2.js"></script>
+        <script>
+            function getColor(arry) {
+                return "rgba(" + arry.join(',') + ")";
+                //return "#" + arry.join('');
+            }
+            function getRandomColor(reduceOpacity)
+            {
+                if (reduceOpacity == null) reduceOpacity = 1;
+                array = [];
+                /*hexdigits = '0123456789abcdef';
+                for (var v = 1; v <= 6; v++)
+                {
+                    var rindex = Math.floor(Math.random() * hexdigits.length);
+                    array.push(hexdigits[rindex]);
+                }*/
+                for (var c = 1; c <= 3; c++)
+                    array.push(Math.floor(Math.random() * 256));
+                array.push(Math.random() / reduceOpacity);
+                return getColor(array);
+            }
+
+            function st(t) { $("#title").text(t); }
+
+            var randomSets = [];
+            for (var sCount = 1; sCount <= 10; sCount++) {
+                var numberOfColors = 3 + Math.floor(8 * Math.random());
+                randomSets[sCount - 1] = [];
+                for(var c = 1; c<=numberOfColors; c++)
+                {
+                    var ro = 1;
+                    if (c == numberOfColors)
+                        ro = 4;
+                    randomSets[sCount - 1].push(getRandomColor(ro));
+                }
+            }
+
+            function constructRadialGradient(colorSet)
+            {
+                var str = "radial-gradient(circle at %x%px %y%px, ";
+                var percentageStep = (60 / colorSet.length).toFixed(2);
+                for(var c = 0; c<colorSet.length; c++)
+                {
+                    str += colorSet[c] + " " + (percentageStep*(c+1)).toFixed(2) + "%";
+                    if (c != colorSet.length - 1) str += ", ";
+                }
+                str += ")";
+                return str;
+            }
+
+            function replaceXY(str, x, y)
+            {
+                return str.replace(/%x%/, x).replace(/%y%/, y);
+            }
+
+            var gradients = [];
+            for (var g = 1; g <= 4; g++)
+            {
+                gradients.push(constructRadialGradient(randomSets[g-1]));
+            }
+
+            timer = null;
+            xy = null;
+            vxy = [1, 1];
+            var lock = false;
+
+            function Do(x1, y1)
+            {
+                if (lock) return;
+                lock = true;
+                console.log("Do: " + x1 + ", " + y1);
+                var xo1 = null, yo1 = null;
+                if (x1 == null || y1 == null)
+                {
+                    x1 = xy[0];
+                    y1 = xy[1];
+                    console.log("Do: " + x1 + ", " + y1);
+                }
+
+                var points = [
+                        [x1, y1],
+                        [$("body").width() - x1, $("body").height() - y1],
+                        [x1, $("body").height() - y1],
+                        [$("body").width() - x1, y1],
+                ];
+
+                var replacedGradients = [];
+                for (var x = 0; x < points.length; x++)
+                    replacedGradients.push(replaceXY(gradients[x], points[x][0], points[x][1]));
+
+                //$("#radial").css('background-image', 'radial-gradient(circle at ' + e.originalEvent.offsetX + 'px ' + e.originalEvent.offsetY + 'px,#15f 10%,#00F 20%,#FFF 35%,#345 40%, #f41 50%, purple 60%)')
+                $("body").css('background-image', replacedGradients.join(','));
+
+                if(xo1== null || yo1==null)
+                {
+                    xy[0] = xy[0] + vxy[0];
+                    xy[1] = xy[1] + vxy[1];
+
+                    if (xy[0] <= 0 || xy[0] >= $("body").width())
+                        vxy[0] = -vxy[0];
+
+                    if (xy[1] <= 0 || xy[1] >= $("body").height())
+                        vxy[1] = -vxy[1];
+                }
+
+                lock = false;
+            }
+
+            $(document).ready(function () {
+                $("body").mousemove(function (e) {
+                    if (timer != null) clearInterval(timer);
+                    timer = null;
+                    var x1 = e.originalEvent.offsetX;
+                    var y1 = e.originalEvent.offsetY;
+                    xy = [x1, y1];
+                    Do(x1, y1);
+                    
+                }).mouseout(function (e) {
+                    console.log("mouseout");
+                    if(timer == null)
+                        timer = setInterval(Do, 1);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <h1 id="title"></h1>
+        <div id="radial">
+
+        </div>
+    </body>
+</html>
+
