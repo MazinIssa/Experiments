@@ -1,0 +1,46 @@
+﻿<div id="canvas">
+
+</div>
+
+@section scripts
+{
+    <script>
+        var interval;
+        var colors = ['red', 'blue', 'green', 'yellow', 'white', 'violet', 'orange', 'purple', 'gray', 'navy'];
+        $(function () {
+            var canvas = $("#canvas");
+
+            for(var b = 1; b<=1000; b++)
+            {
+                var block = $("<div>").attr("class", "block");
+                //block.css("background-color", colors[Math.floor(Math.random() * 10)]);
+                canvas.append(block);
+            }
+
+            interval = setInterval(changeColors, 1000);
+        });
+
+        function changeColors() {
+            $("#canvas .block").each(function () {
+                $(this).css("background-color", colors[Math.floor(Math.random() * 10)]);
+            });
+        }
+    </script>
+}
+
+<link href="~/Content/reset.css" rel="stylesheet" />
+<style>
+
+
+    .block {
+        -moz-transition: all linear 1s;
+        -o-transition: all linear 1s;
+        -webkit-transition: all linear 1s;
+        transition: all linear 1s;
+
+        width: 20px;
+        height: 20px;
+        float: left;
+        margin: 1px;
+    }
+</style>

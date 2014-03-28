@@ -13,5 +13,10 @@ namespace CssDesignPatterns.Controllers
             return View();
         }
 
+        public ActionResult Page()
+        {
+            return View();
+        }
+
     }
 }

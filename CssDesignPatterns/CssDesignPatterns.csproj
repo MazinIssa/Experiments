@@ -137,6 +137,7 @@
       <DependentUpon>CoffeeScript2.coffee</DependentUpon>
     </Content>
     <Content Include="Content\owl.jpg" />
+    <Content Include="Content\reset.css" />
     <Content Include="Content\Scss1.css">
       <DependentUpon>Scss1.scss</DependentUpon>
     </Content>
@@ -244,6 +245,8 @@
     <Content Include="Views\Shared\dprg.cshtml" />
     <Content Include="Views\Shared\dpradial.cshtml" />
     <Content Include="Views\Shared\dp3col.cshtml" />
+    <Content Include="Views\Home\Page.cshtml" />
+    <Content Include="Views\Shared\dpBlocks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
